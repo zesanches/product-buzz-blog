@@ -4,8 +4,8 @@ import { type Category } from "@/types/category";
 
 type CategoryListProps = {
   categories: Category[];
-  activeCategory?: number | null;
-  onClickCategory?: (categoryId: number) => void;
+  activeCategory?: string | null;
+  onClickCategory?: (categoryId: string) => void;
 };
 
 export default function CategoryList({
