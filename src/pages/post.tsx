@@ -12,7 +12,6 @@ import ProductInfoCard from "@/components/post/ProductInfoCard";
 import { Article } from "@/types/article";
 
 const PostDetail = () => {
-  const { slug } = useParams<{ slug: string }>();
   const [post, setPost] = useState<Article | null>(null);
   const [htmlContent, setHtmlContent] = useState(
     "<div>Hello <b>World!</b> </div>"
