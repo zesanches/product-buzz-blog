@@ -3,22 +3,20 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
-import { type Post } from "@/lib/posts";
 
 // Import our new components
 import PostHeader from "@/components/post/PostHeader";
 import PostContent from "@/components/post/PostContent";
 import PostShareTools from "@/components/post/PostShareTools";
 import ProductInfoCard from "@/components/post/ProductInfoCard";
-import RelatedPosts from "@/components/post/RelatedPosts";
+import { Article } from "@/types/article";
 
 const PostDetail = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<Post | null>(null);
+  const [post, setPost] = useState<Article | null>(null);
   const [htmlContent, setHtmlContent] = useState(
     "<div>Hello <b>World!</b> </div>"
   );
-  const [relatedPosts, setRelatedPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
   if (loading) {
@@ -50,32 +48,29 @@ const PostDetail = () => {
   return (
     <Layout>
       {/* Hero section with post image */}
-      <PostHeader frontmatter={post.frontmatter} />
+      <PostHeader frontmatter={post.items[0]} />
 
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Main content */}
           <div className="lg:col-span-3">
             <PostContent
-              frontmatter={post.frontmatter}
+              frontmatter={post.items[0]}
               htmlContent={htmlContent}
             />
 
             {/* Share buttons */}
             <PostShareTools
-              title={post.frontmatter.title}
-              description={post.frontmatter.description}
+              title={post.items[0].title}
+              description={post.items[0].description}
               url={window.location.href}
             />
-
-            {/* Related posts */}
-            <RelatedPosts posts={relatedPosts} />
           </div>
 
           {/* Sidebar */}
           <div>
             {/* Product info card */}
-            <ProductInfoCard frontmatter={post.frontmatter} />
+            <ProductInfoCard frontmatter={post.items[0]} />
           </div>
         </div>
       </div>

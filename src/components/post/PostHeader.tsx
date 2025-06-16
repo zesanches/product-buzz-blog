@@ -2,10 +2,10 @@ import { Badge } from "@/components/ui/badge";
 import { Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { enUS } from "date-fns/locale"; // Changed to enUS for English locale
-import { type PostFrontmatter } from "@/lib/posts";
+import { ArticleItem } from "@/types/article";
 
 type PostHeaderProps = {
-  frontmatter: PostFrontmatter;
+  frontmatter: ArticleItem;
 };
 
 export default function PostHeader({ frontmatter }: PostHeaderProps) {
@@ -18,7 +18,7 @@ export default function PostHeader({ frontmatter }: PostHeaderProps) {
     <div
       className="relative w-full h-64 md:h-96 bg-cover bg-center"
       style={{
-        backgroundImage: `url(${frontmatter.image || "/placeholder.svg"})`,
+        backgroundImage: `url(${frontmatter.products[0].imagem || "/placeholder.svg"})`,
       }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-50 flex items-end">

@@ -2,11 +2,11 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { type PostFrontmatter } from "@/lib/posts";
 import { event } from "@/lib/analytics";
+import { ArticleItem } from "@/types/article";
 
 type ProductInfoCardProps = {
-  frontmatter: PostFrontmatter;
+  frontmatter: ArticleItem;
 };
 
 export default function ProductInfoCard({ frontmatter }: ProductInfoCardProps) {
@@ -25,7 +25,7 @@ export default function ProductInfoCard({ frontmatter }: ProductInfoCardProps) {
       <div className="space-y-4">
         <div>
           <p className="text-sm text-muted-foreground mb-1">Price:</p>
-          <p className="font-semibold">{frontmatter.price}</p>
+          <p className="font-semibold">{frontmatter.products[0].price}</p>
         </div>
         <div>
           <p className="text-sm text-muted-foreground mb-1">Category:</p>
@@ -35,7 +35,7 @@ export default function ProductInfoCard({ frontmatter }: ProductInfoCardProps) {
         </div>
 
         <a
-          href={frontmatter.affiliateLink}
+          href={frontmatter.products[0].price}
           target="_blank"
           rel="noopener noreferrer"
           className="block mt-6"

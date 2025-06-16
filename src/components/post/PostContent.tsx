@@ -1,10 +1,10 @@
 import { Badge } from "@/components/ui/badge";
+import { ArticleItem } from "@/types/article";
 import { Tag } from "lucide-react";
-import { type PostFrontmatter } from "@/lib/posts";
 import { Editor } from "primereact/editor";
 
 type PostContentProps = {
-  frontmatter: PostFrontmatter;
+  frontmatter: ArticleItem;
   htmlContent: string;
 };
 
@@ -15,13 +15,13 @@ export default function PostContent({
   return (
     <div className="prose dark:prose-invert max-w-none">
       <div className="mb-8 text-lg text-muted-foreground">
-        {frontmatter.description}
+        {frontmatter.content}
       </div>
 
       {/* Tags */}
       <div className="flex flex-wrap gap-2 my-6">
         <Tag className="h-4 w-4 mr-1" />
-        {frontmatter.tags.map((tag) => (
+        {frontmatter.tag.map((tag) => (
           <Badge key={tag} variant="secondary" className="mr-2">
             {tag}
           </Badge>

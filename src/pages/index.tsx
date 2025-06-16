@@ -38,7 +38,7 @@ export default function Index({
   featuredArticle,
   categories,
 }: Props) {
-  const [activeCategory, setActiveCategory] = useState<number | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -94,7 +94,7 @@ export default function Index({
             <Card className="p-4">
               <CategoryList
                 categories={categories}
-                onClickCategory={(categoryId: number) => {
+                onClickCategory={(categoryId: string) => {
                   setActiveCategory(categoryId);
                 }}
                 activeCategory={activeCategory}
