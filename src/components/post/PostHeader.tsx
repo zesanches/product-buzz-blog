@@ -1,8 +1,7 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "lucide-react";
 import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { enUS } from "date-fns/locale"; // Changed to enUS for English locale
 import { type PostFrontmatter } from "@/lib/posts";
 
 type PostHeaderProps = {
@@ -10,13 +9,16 @@ type PostHeaderProps = {
 };
 
 export default function PostHeader({ frontmatter }: PostHeaderProps) {
-  const formattedDate = format(new Date(frontmatter.date), "d 'de' MMMM 'de' yyyy", { locale: ptBR });
+  // Format the date for English (e.g., "May 24, 2025")
+  const formattedDate = format(new Date(frontmatter.date), "MMMM d, yyyy", {
+    locale: enUS,
+  });
 
   return (
     <div
       className="relative w-full h-64 md:h-96 bg-cover bg-center"
       style={{
-        backgroundImage: `url(${frontmatter.image || '/placeholder.svg'})`,
+        backgroundImage: `url(${frontmatter.image || "/placeholder.svg"})`,
       }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-50 flex items-end">

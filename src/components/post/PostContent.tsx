@@ -1,14 +1,17 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Tag } from "lucide-react";
 import { type PostFrontmatter } from "@/lib/posts";
+import { Editor } from "primereact/editor";
 
 type PostContentProps = {
   frontmatter: PostFrontmatter;
   htmlContent: string;
 };
 
-export default function PostContent({ frontmatter, htmlContent }: PostContentProps) {
+export default function PostContent({
+  frontmatter,
+  htmlContent,
+}: PostContentProps) {
   return (
     <div className="prose dark:prose-invert max-w-none">
       <div className="mb-8 text-lg text-muted-foreground">
@@ -25,11 +28,9 @@ export default function PostContent({ frontmatter, htmlContent }: PostContentPro
         ))}
       </div>
 
-      {/* Markdown content */}
-      <div 
-        className="markdown-content"
-        dangerouslySetInnerHTML={{ __html: htmlContent }} 
-      />
+      <div className="card">
+        <Editor value={htmlContent} readOnly style={{ height: "320px" }} />
+      </div>
     </div>
   );
 }

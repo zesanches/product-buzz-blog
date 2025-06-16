@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://blogrecomenda.com.br/sitemap.xml
+Sitemap: http://product-buzz-blog.vercel.app/sitemap.xml

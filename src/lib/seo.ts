@@ -2,26 +2,26 @@
 import { DefaultSeoProps } from 'next-seo';
 
 const SEO_CONFIG: DefaultSeoProps = {
-  titleTemplate: '%s | BlogRecomenda',
-  defaultTitle: 'BlogRecomenda - As Melhores Recomendações de Produtos',
+  titleTemplate: '%s | ProductBuzz',
+  defaultTitle: 'ProductBuzz - As Melhores Recomendações de Produtos',
   description: 'Recomendações imparciais dos melhores produtos e equipamentos testados por especialistas.',
-  canonical: 'https://blogrecomenda.com.br',
+  canonical: 'https://product-buzz-blog.vercel.app/',
   openGraph: {
     type: 'website',
     locale: 'pt_BR',
-    url: 'https://blogrecomenda.com.br',
-    siteName: 'BlogRecomenda',
+    url: 'https://product-buzz-blog.vercel.app/',
+    siteName: 'ProductBuzz',
     images: [
       {
-        url: 'https://blogrecomenda.com.br/og-image.jpg',
+        url: 'https://product-buzz-blog.vercel.app/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'BlogRecomenda',
+        alt: 'ProductBuzz',
       },
     ],
   },
   twitter: {
-    handle: '@blogrecomenda',
+    handle: '@productbuzz',
     cardType: 'summary_large_image',
   },
   additionalMetaTags: [

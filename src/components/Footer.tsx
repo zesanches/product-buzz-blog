@@ -1,19 +1,18 @@
-
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Facebook, Twitter, Mail } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
-  
+
   return (
     <footer className="bg-muted py-12 mt-16">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* About section */}
-          <div className="col-span-1 md:col-span-2">
-            <h2 className="text-xl font-bold mb-4">BlogRecomenda</h2>
+        <div className="flex w-full gap-8 justify-between">
+          <div className="col-span-1 md:col-span-1">
+            <h2 className="text-xl font-bold mb-4">ProductBuzz</h2>
             <p className="mb-4 text-muted-foreground">
-              Recomendações imparciais dos melhores produtos e equipamentos testados por especialistas.
+              Unbiased recommendations of the best products and equipment tested
+              by experts.
             </p>
             <div className="flex space-x-4">
               <a
@@ -33,7 +32,7 @@ export default function Footer() {
                 <Twitter size={20} />
               </a>
               <a
-                href="mailto:contato@blogrecomenda.com.br"
+                href="mailto:contact@productbuzz.com"
                 className="hover:text-primary"
               >
                 <Mail size={20} />
@@ -41,75 +40,53 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Navigation links */}
-          <div>
-            <h3 className="font-semibold mb-4">Links Rápidos</h3>
+          <div className="flex flex-col items-end">
+            <h3 className="font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              <li>
-                <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">
+              <li className="flex justify-end w-full">
+                <Link
+                  href="/"
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   Home
                 </Link>
               </li>
-              <li>
-                <Link to="/categorias" className="text-muted-foreground hover:text-primary transition-colors">
-                  Categorias
-                </Link>
-              </li>
-              <li>
-                <Link to="/sobre" className="text-muted-foreground hover:text-primary transition-colors">
-                  Sobre
-                </Link>
-              </li>
-              <li>
-                <Link to="/contato" className="text-muted-foreground hover:text-primary transition-colors">
-                  Contato
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Categories */}
-          <div>
-            <h3 className="font-semibold mb-4">Categorias</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link 
-                  to="/categorias/Tecnologia" 
+              <li className="flex justify-end w-full">
+                <Link
+                  href="/about"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Tecnologia
+                  About
                 </Link>
               </li>
-              <li>
-                <Link 
-                  to="/categorias/Esportes" 
+              <li className="flex justify-end w-full">
+                <Link
+                  href="/contact"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  Esportes
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/categorias/Saúde" 
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  Saúde
+                  Contact
                 </Link>
               </li>
             </ul>
           </div>
         </div>
-        
+
         <div className="border-t border-border mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            © {currentYear} BlogRecomenda. Todos os direitos reservados.
+            © {currentYear} ProductBuzz. All rights reserved.
           </p>
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <Link to="/politica-de-privacidade" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Política de Privacidade
+            <Link
+              href="/privacy-police"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              Privacy Policy
             </Link>
-            <Link to="/termos-de-uso" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-              Termos de Uso
+            <Link
+              href="/terms-of-use"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              Terms of Use
             </Link>
           </div>
         </div>

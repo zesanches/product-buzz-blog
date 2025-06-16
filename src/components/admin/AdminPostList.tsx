@@ -1,65 +1,222 @@
+"use client";
 
-import { useState, useEffect } from 'react';
-import { getAllPosts, type Post } from '@/lib/posts';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { Calendar, ExternalLink } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { formatDistanceToNow } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
+import { useEffect, useState } from "react";
+import LoadingArticles from "@/components/loading/LoadingArticle";
+import { api } from "@/api/api";
+import { ArticleItem, type Article } from "@/types/article";
+import { useToast } from "@/components/ui/use-toast";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  Row,
+  useReactTable,
+  ColumnFiltersState,
+  getFilteredRowModel,
+  VisibilityState,
+} from "@tanstack/react-table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import { createColumns } from "./utils/createColumns";
+import { Button } from "../ui/button";
 
 const AdminPostList = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const { toast } = useToast();
+  const [mainPosts, setMainPosts] = useState<Article>();
+  const [loading, setLoading] = useState(true);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
+
+  const columns = createColumns({
+    config: {
+      actions: [
+        {
+          label: "Edit",
+          onClick: (row: Row<ArticleItem>) => {
+            console.log("Edit action for row:", row.original);
+          },
+        },
+        {
+          label: "Delete",
+          onClick: (row: Row<ArticleItem>) => {
+            console.log("Delete action for row:", row.original);
+          },
+        },
+      ],
+    },
+  });
+
+  const table = useReactTable({
+    data: mainPosts?.items || [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      columnFilters,
+      columnVisibility,
+      rowSelection,
+    },
+  });
 
   useEffect(() => {
-    setPosts(getAllPosts());
-  }, []);
+    const fetchArticles = async () => {
+      try {
+        const response = await api.get("/article");
+
+        setMainPosts(response.data);
+      } catch (err: unknown) {
+        toast({
+          title: "Failed to load articles",
+          description:
+            "An error occurred while trying to fetch the article list.",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, [toast]);
+
+  if (loading) {
+    return <LoadingArticles />;
+  }
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold mb-4">Artigos Publicados</h2>
-      
-      {posts.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">Nenhum artigo publicado ainda.</p>
+      <h2 className="text-xl font-semibold mb-4">Published Articles</h2>
+
+      <div className="rounded-md border">
+        <div className="flex items-center p-4 my-4">
+          <div className="flex-1">
+            <Input
+              placeholder="Filter slugs..."
+              value={
+                (table.getColumn("slug")?.getFilterValue() as string) ?? ""
+              }
+              onChange={({ target }) =>
+                table.getColumn("slug")?.setFilterValue(target.value)
+              }
+              className="max-w-sm"
+            />
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                Columns
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-      ) : (
-        <div className="space-y-4">
-          {posts.map((post) => (
-            <Card key={post.frontmatter.slug}>
-              <CardContent className="pt-6">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-semibold text-lg">{post.frontmatter.title}</h3>
-                    <div className="flex items-center text-sm text-muted-foreground mt-2 gap-2">
-                      <Calendar size={14} />
-                      <span>
-                        {formatDistanceToNow(new Date(post.frontmatter.date), {
-                          addSuffix: true,
-                          locale: ptBR,
-                        })}
-                      </span>
-                    </div>
-                  </div>
-                  <div>
-                    <span className="inline-flex items-center rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
-                      {post.frontmatter.category}
-                    </span>
-                  </div>
-                </div>
-              </CardContent>
-              <CardFooter className="flex justify-end gap-2">
-                <Button variant="outline" asChild>
-                  <Link to={`/posts/${post.frontmatter.slug}`}>
-                    <ExternalLink className="h-4 w-4 mr-1" /> 
-                    Visualizar
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
-          ))}
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+        <div className="text-muted-foreground flex-1 text-sm m-4">
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-      )}
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 };
